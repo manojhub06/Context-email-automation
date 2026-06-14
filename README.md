@@ -240,6 +240,14 @@ Have questions or issues?
 
 ---
 
+## Screen Shot's
+<img width="926" height="332" alt="Screenshot 2026-06-14 150510" src="https://github.com/user-attachments/assets/d5629c1d-8b97-456b-afc7-c6f655c6e5c5" />
+
+<img width="614" height="290" alt="Screenshot 2026-06-14 150857" src="https://github.com/user-attachments/assets/865ec3f0-8719-4ae5-ba4c-f84e78b130ba" />
+
+<img width="905" height="405" alt="Screenshot 2026-06-14 162517" src="https://github.com/user-attachments/assets/a661ede8-b357-49cf-87c8-a452af9c3c6f" />
+
+---
 ## 👨‍💻 Author
 
 Built as an AI automation project to save time on email management.
