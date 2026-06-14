@@ -1,0 +1,522 @@
+{
+  "name": "The Original Context Email",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyMinute"
+            }
+          ]
+        },
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        112,
+        144
+      ],
+      "id": "YOUR_GMAIL_CREDENTIAL_ID",
+      "name": "Gmail Trigger",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "YOUR_GMAIL_Oauth_ID",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_Chat_CREDENTIAL_ID",
+        "text": "={{ $json.AI_Summary }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1616,
+        128
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Send a text message",
+      "webhookId": "YOUR_Own_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_Own_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1-CfA5OBHBsJWLAdNhL6yzKVxEyb8mYn0pX9rj6DC2SA",
+          "mode": "list",
+          "cachedResultName": "AI agent data base",
+          "cachedResultUrl": "YOUR_Own_Spread_sheet"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Summary chat history",
+          "cachedResultUrl": "YOUR_Own_Spread_sheet"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Sender_Email": "={{ $('Gmail Trigger').item.json.From }}",
+            "Subject": "={{ $('Gmail Trigger').item.json.Subject }}",
+            "Full_Email_Content": "={{ $('Gmail Trigger').item.json.snippet }}",
+            "AI_Summary": "={{ $json.output[0].content[0].text }}",
+            "Received_Time": "={{ $now }}",
+            "Thread_ID": "={{ $('Gmail Trigger').item.json.threadId }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "Email_ID",
+              "displayName": "Email_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sender_Name",
+              "displayName": "Sender_Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Sender_Email",
+              "displayName": "Sender_Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Subject",
+              "displayName": "Subject",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Full_Email_Content",
+              "displayName": "Full_Email_Content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "AI_Summary",
+              "displayName": "AI_Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Received_Time",
+              "displayName": "Received_Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Thread_ID",
+              "displayName": "Thread_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Priority ",
+              "displayName": "Priority ",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        864,
+        144
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Append row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_Own_ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        352
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Telegram Trigger",
+      "webhookId": "YOUR_Own_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_Own_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "YOUR_Own_ID",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1232,
+        352
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Send a text message1",
+      "webhookId": "YOUR_Own_ID",
+      "credentials": {
+        "telegramApi": {
+          "id": "YOUR_Own_ID",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.chat.id }}",
+        "contextWindowLength": 10
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        816,
+        576
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "1-CfA5OBHBsJWLAdNhL6yzKVxEyb8mYn0pX9rj6DC2SA",
+          "mode": "list",
+          "cachedResultName": "AI agent data base",
+          "cachedResultUrl": "YOUR_Own_Google_sheet"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Summary chat history",
+          "cachedResultUrl": "YOUR_Own_Google_sheet"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheetsTool",
+      "typeVersion": 4.7,
+      "position": [
+        960,
+        576
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Get row(s) in sheet in Google Sheets",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "YOUR_Own_ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-5-mini"
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.3,
+      "position": [
+        624,
+        560
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "OpenAI Chat Model",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_Own_ID",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-5-mini",
+          "mode": "list",
+          "cachedResultName": "GPT-5-MINI"
+        },
+        "responses": {
+          "values": [
+            {
+              "content": "=Summarize this email in exactly 4 sections with these headers:\n\n🎯 The Pitch\n\nWho emailed and what do they want? Keep it to 1-2 sentences maximum.\n\nStart casually, like:\n\n\"Hey! Arjun just slid into your inbox about [topic].\"\n\n---\n\n📋 The Details\n\nExplain the main proposal, request, issue, or important facts in a conversational way.\n\nKeep it to 2-3 sentences maximum.\n\n---\n\n⏰ The Timeline\n\nMention any dates, deadlines, meetings, or time-sensitive information.\n\nIf there is no timeline, write exactly:\n\n\"No specific timeline—just a heads up.\"\n\n---\n\n🚨 Priority Level\n\nAssign ONLY one priority:\n\n* High\n* Medium\n* Low\n\nRules:\n\n* High → Urgent emails, deadlines, work requests, client communications, action required.\n* Medium → Important updates or follow-ups that are not urgent.\n* Low → Newsletters, marketing emails, promotions, social notifications, advertisements.\n\nAfter the priority, add one short sentence explaining why.\n\nExample:\n\nMedium – Important information, but no immediate action is required.\n\n---\n\nEMAIL TO SUMMARIZE:\n\nSender Email: {{ $json.From }}\n\nSubject: {{ $json.Subject }}\n\nContent: {{ $json.snippet }}\n\n---\n\nKeep the tone short, casual, and conversational.\n\nDo not add anything outside these four sections.\n"
+            },
+            {
+              "role": "system",
+              "content": "You're an intelligent email assistant "
+            }
+          ]
+        },
+        "builtInTools": {},
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.3,
+      "position": [
+        480,
+        144
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "Summary agent",
+      "credentials": {
+        "openAiApi": {
+          "id": "YOUR_Own_ID",
+          "name": "n8n free OpenAI API credits"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "=You are a chill email assistant. Your job: answer questions about emails from the user's email database.\n\nRULES:\n\n1. KEEP IT SHORT: 1-2 sentences max (unless they ask for more details)\n2. USE THE EMAIL DATABASE: The user has access to their emails. Reference them when answering questions.\n3. GREETINGS: If user says \"Hi\", \"Hey\", \"Hello\" — chat naturally, don't force email context\n4. AMBIGUOUS: If unclear what they're asking, ask for clarification\n5. NEVER INVENT: Only use what's in the database. Never make up email data.\n\nEXAMPLES:\n\nUser: \"Who sent me the latest email?\"\nYou: \"That was Manoj about meeting up.\"\n\nUser: \"What's the sender's email from that project email?\"\nYou: \"It's manoj@company.com\"\n\nUser: \"Hi, how are you?\"\nYou: \"Hey! I'm good, thanks for asking. What's up?\"\n\nUser: \"Make it shorter\"\nYou: \"Which email are you asking about?\"\n\n---\n\nUSER MESSAGE:\n{{ $json.message.text }}\n\nRemember: Be conversational, short, helpful. Reference the database when needed."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        704,
+        352
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "explainer  Agent"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "YOUR_Own_ID",
+              "leftValue": "={{ $json.AI_Summary }}",
+              "rightValue": "Medium",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "YOUR_Own_ID",
+              "leftValue": "={{ $json.Full_Email_Content }}",
+              "rightValue": "High",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        1168,
+        144
+      ],
+      "id": "YOUR_Own_ID",
+      "name": "If"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Gmail Trigger": {
+      "main": [
+        [
+          {
+            "node": "Summary agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append row in sheet": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "explainer  Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "explainer  Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet in Google Sheets": {
+      "ai_tool": [
+        [
+          {
+            "node": "explainer  Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "explainer  Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summary agent": {
+      "main": [
+        [
+          {
+            "node": "Append row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "explainer  Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "fd96a378-73e8-4ecf-8151-7e600a6a1fd5",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "01e47f589ca70da543ac138043814da8c72bd31cb462c5b2f1f4bb48f1078f6c"
+  },
+  "nodeGroups": [],
+  "id": "YOUR_Own_ID",
+  "tags": []
+}
